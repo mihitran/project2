@@ -47,11 +47,26 @@ module.exports.index = async (req, res) => {
     .skip(pagination.skip);
 
   // console.log(products);
-    res.render("admin/pages/products/index", {
-      pageTitle: "Quản lý sản phẩm",
-      products: products,
-      keyword: keyword,
-      filterStatus: filterStatus,
-      pagination: pagination
-    });
-  }
+  res.render("admin/pages/products/index", {
+    pageTitle: "Quản lý sản phẩm",
+    products: products,
+    keyword: keyword,
+    filterStatus: filterStatus,
+    pagination: pagination
+  });
+}
+
+// [PATCH] /admin/products/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+  const { id, statusChange } = req.params;
+
+  await Product.updateOne({
+    _id: id
+  }, {
+    status: statusChange
+  });
+
+  res.json({
+    code: 200
+  });
+}
