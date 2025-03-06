@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model");
+const paginationHelper = require("../../helpers/pagination.helper");
 
 // [GET] /admin/products/
 module.exports.index = async (req, res) => {
@@ -36,12 +37,21 @@ module.exports.index = async (req, res) => {
   }
   // Het tim kiem
 
-  const products = await Product.find(find);
+  // Phan trang
+  const pagination = await paginationHelper(req, find);
+  // Het phan trang
+
+  const products = await Product
+    .find(find)
+    .limit(pagination.limitItems)
+    .skip(pagination.skip);
+
   // console.log(products);
     res.render("admin/pages/products/index", {
       pageTitle: "Quản lý sản phẩm",
       products: products,
       keyword: keyword,
-      filterStatus: filterStatus
+      filterStatus: filterStatus,
+      pagination: pagination
     });
   }
