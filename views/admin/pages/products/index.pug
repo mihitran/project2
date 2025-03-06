@@ -1,4 +1,6 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
 
 block main
   h1(class="mb-4") Quản lý sản phẩm
@@ -6,18 +8,11 @@ block main
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
     .card-body
-      button(
-        class="btn btn-sm ml-1 btn-outline-success"
-        button-status=""
-      ) Tất cả
-      button(
-        class="btn btn-sm ml-1 btn-outline-success"
-        button-status="active"
-      ) Hoạt động
-      button(
-        class="btn btn-sm ml-1 btn-outline-success"
-        button-status="inactive"
-      ) Dừng hoạt động
+      .row
+        .col-6
+          +filter-status(filterStatus)
+        .col-6
+          +search(keyword)
 
   .card.mb-3
     .card-header Danh sách
