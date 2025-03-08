@@ -1,5 +1,6 @@
 const Product = require("../../models/product.model");
 const paginationHelper = require("../../helpers/pagination.helper");
+const systemConfig = require("../../config/system");
 
 // [GET] /admin/products/
 module.exports.index = async (req, res) => {
@@ -132,4 +133,30 @@ module.exports.changePosition = async (req, res) => {
   res.json({
     code: 200
   });
+}
+
+// [GET] /admin/products/create
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create", {
+    pageTitle: "Thêm mới sản phẩm"
+  });
+}
+
+// [POST] /admin/products/create
+module.exports.createPost = async (req, res) => {
+  if(req.file && req.file.filename) {
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  if(req.body.position) {
+    req.body.position = parseInt(req.body.position);
+  } else {
+    const countProducts = await Product.countDocuments({});
+    req.body.position = countProducts + 1;
+  }
+  const newProduct = new Product(req.body);
+  await newProduct.save();
+  res.redirect(`/${systemConfig.prefixAdmin}/products`);
 }
