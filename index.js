@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override');
 const database = require("./config/database");
 database.connect();
 const routeAdmin = require("./routes/admin/index.route");
@@ -11,6 +12,8 @@ const routeClient = require("./routes/client/index.route");
 const systemConfig = require("./config/system");
 const app = express();
 const port = process.env.PORT;
+
+app.use(methodOverride('_method'));
 
 // Flash
 app.use(cookieParser('HHKALKS'));
