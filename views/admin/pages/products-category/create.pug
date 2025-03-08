@@ -1,10 +1,10 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") #{pageTitle}
+  h1(class="mb-4") Thêm mới danh mục sản phẩm
 
   form(
-    action=`/${prefixAdmin}/products/create`
+    action=`/${prefixAdmin}/products-category/create`
     method="POST"
     enctype="multipart/form-data"
   )
@@ -18,43 +18,22 @@ block main
         required
       )
     div(class="form-group")
+      label(for="parent_id") Danh mục cha
+      input(
+        type="text"
+        class="form-control"
+        id="parent_id"
+        name="parent_id"
+      )
+    div(class="form-group")
       label(for="desc") Mô tả
       textarea(
+        type="text"
         class="form-control"
         id="desc"
         name="description"
         rows="5"
         textarea-mce
-      )
-    div(class="form-group")
-      label(for="price") Giá
-      input(
-        type="number"
-        class="form-control"
-        id="price"
-        name="price"
-        value="0"
-        min="0"
-      )
-    div(class="form-group")
-      label(for="discount") % Giảm giá
-      input(
-        type="number"
-        class="form-control"
-        id="discount"
-        name="discountPercentage"
-        value="0"
-        min="0"
-      )
-    div(class="form-group")
-      label(for="stock") Số lượng
-      input(
-        type="number"
-        class="form-control"
-        id="stock"
-        name="stock"
-        value="0"
-        min="0"
       )
     div(
       class="form-group"

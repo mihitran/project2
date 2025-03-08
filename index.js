@@ -5,6 +5,7 @@ const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
+const path = require('path');
 const database = require("./config/database");
 database.connect();
 const routeAdmin = require("./routes/admin/index.route");
@@ -29,6 +30,8 @@ app.use(bodyParser.json());
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
+
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 app.use(express.static(`${__dirname}/public`));
 

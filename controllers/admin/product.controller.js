@@ -42,13 +42,20 @@ module.exports.index = async (req, res) => {
   const pagination = await paginationHelper(req, find);
   // Het phan trang
 
+  // Sắp xếp
+  const sort = {};
+  if(req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+  // Hết Sắp xếp
+
   const products = await Product
     .find(find)
     .limit(pagination.limitItems)
     .skip(pagination.skip)
-    .sort({
-      position: "desc"
-    });
+    .sort(sort);
 
   // console.log(products);
   res.render("admin/pages/products/index", {
@@ -144,9 +151,6 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  if(req.file && req.file.filename) {
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
