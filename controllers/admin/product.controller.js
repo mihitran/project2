@@ -1,5 +1,7 @@
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
 const paginationHelper = require("../../helpers/pagination.helper");
+const createTreeHelper = require("../../helpers/createTree.helper");
 const systemConfig = require("../../config/system");
 
 // [GET] /admin/products/
@@ -144,8 +146,14 @@ module.exports.changePosition = async (req, res) => {
 
 // [GET] /admin/products/create
 module.exports.create = async (req, res) => {
+  const categories = await ProductCategory.find({
+    deleted: false
+  });
+
+  const newCategories = createTreeHelper(categories);
   res.render("admin/pages/products/create", {
-    pageTitle: "Thêm mới sản phẩm"
+    pageTitle: "Thêm mới sản phẩm",
+    categories: newCategories
   });
 }
 
@@ -174,9 +182,15 @@ module.exports.edit = async (req, res) => {
       deleted: false
     });
     if(product) {
+      const categories = await ProductCategory.find({
+        deleted: false
+      });
+    
+      const newCategories = createTreeHelper(categories);
       res.render("admin/pages/products/edit", {
         pageTitle: "Chỉnh sửa sản phẩm",
-        product: product
+        product: product,
+        categories: newCategories
       });
     } else {
       res.redirect(`/${systemConfig.prefixAdmin}/products`);
